@@ -52,6 +52,8 @@ class Intelligence : Stat
 class Hero
 {
     public string Name { set; get; }
+    public int Experience { set; get; }
+    public int Level => Experience / 100;
     public Health Health { set; get; }
     public Strength Strength { get; set; }
     public Agility Agility { get; set; }
@@ -69,10 +71,14 @@ class Hero
 
         Health.Value = health.Value + strength.Value * 1.6;
         Damage.Value = damage.Value + agility.Value * 1.2;
+
     }
 
     public void Attack(Hero hero)
     {
+        Health.Value = Health.Value + Strength.Value * 1.6;
+        Damage.Value = Damage.Value + Agility.Value * 1.2;
+
         Console.WriteLine($"{Name} with {string.Format("{0:0}", Health.Value)}HP attacked {hero.Name} " +
                           $"with {string.Format("{0:0}", hero.Health.Value)}HP");
 
@@ -81,7 +87,7 @@ class Hero
 
         if (hero.Health.Value <= 0)
         {
-            Console.WriteLine($"{hero.Name} killed by {Name} in the battle");
+            Kill(hero);
         }
         else if (Health.Value <= 0)
         {
@@ -92,6 +98,18 @@ class Hero
             Console.WriteLine($"{hero.Name} now have {string.Format("{0:0}", hero.Health.Value)}HP\n");
         }
 
+    }
+
+    private void Kill(Hero hero)
+    {
+        Console.WriteLine($"{Name} killed {hero.Name}\n");
+        Experience += 150;
+
+        Agility.Value += 2 * Level;
+        Strength.Value += 2 * Level;
+        Intelligence.Value += 2 * Level;
+
+        Console.WriteLine($"{Name} reached {Level} lvl\n");
     }
 }
 
@@ -104,8 +122,9 @@ class Healer : Hero
     {
         if (hero.Health.Value > 0 && Health.Value > 0)
         {
-            Console.WriteLine($"{Name} with {string.Format("{0:0}", Health.Value)}hp healed {hero.Name}\n");
-            hero.Health.Value += Intelligence.Value * 2.1;
+            Console.WriteLine($"{Name} with {string.Format("{0:0}", Health.Value)}hp healed {hero.Name}");
+            Health.Value += Intelligence.Value * 2.1;
+            Console.WriteLine($"{hero.Name} +{string.Format("{0:0}", Intelligence.Value * 2.1)}hp\n");
 
             Console.WriteLine($"{hero.Name} now have {string.Format("{0:0}", hero.Health.Value)}hp");
         }
@@ -129,7 +148,7 @@ internal class Program
         Hero axe = new Hero(new Health("hp", 100), new Strength("strength", 2),
                             new Damage("damage", 13), new Agility("agility", 4), new Intelligence("intelligence", 3), "Axe");
 
-        Hero lina = new Hero(new Health("hp", 56), new Strength("strength", 1),
+        Hero lina = new Hero(new Health("hp", 30), new Strength("strength", 1),
                             new Damage("damage", 13), new Agility("agility", 8), new Intelligence("intelligence", 6), "Lina");
 
         Healer witchDoctor = new Healer(new Health("hp", 100), new Strength("strength", 0.5),
@@ -139,6 +158,8 @@ internal class Program
 
         axe.Attack(lina);
 
-        witchDoctor.Heal(lina);
+        axe.Attack(witchDoctor);
+
+        witchDoctor.Heal(witchDoctor);
     }
 }
