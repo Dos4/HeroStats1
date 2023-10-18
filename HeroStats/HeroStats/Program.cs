@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-class Stat
+﻿class Stat
 {
     public string Name { get; set; }
     public double Value { get; set; }
@@ -102,7 +100,7 @@ class Hero
 
     }
 
-    public void Kill(Hero hero)
+    private void Kill(Hero hero)
     {
         Console.WriteLine($"{Name} killed {hero.Name}\n");
         Experience += 150;
