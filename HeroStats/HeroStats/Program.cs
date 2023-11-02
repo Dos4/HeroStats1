@@ -100,10 +100,24 @@ class Hero
 
     }
 
+    private void GaveExperience(Hero hero)
+    {
+        int difference = Level - hero.Level;
+
+        if (Level > hero.Level)
+        {
+            Experience = 150 / difference;
+        }
+        else if (Level < hero.Level)
+        {
+            Experience = 150 * difference;
+        }
+    }
+
     private void Kill(Hero hero)
     {
         Console.WriteLine($"{Name} killed {hero.Name}\n");
-        Experience += 150;
+        GaveExperience(hero);
 
         Agility.Value += 2 * Level;
         Strength.Value += 2 * Level;
