@@ -49,6 +49,15 @@ class Intelligence : Stat
     }
 }
 
+class Evasion : Stat
+{
+    public Evasion(string name, double value)
+    {
+        Name = name;
+        Value = value;
+    }
+}
+
 class Hero
 {
     public string Name { set; get; }
@@ -59,8 +68,10 @@ class Hero
     public Agility Agility { get; set; }
     public Damage Damage { get; set; }
     public Intelligence Intelligence { get; set; }
+    public Evasion Evasion { get; set; }
 
-    public Hero(Health health, Strength strength, Damage damage, Agility agility, Intelligence intelligence, string name)
+    public Hero(Health health, Strength strength, Damage damage, Agility agility, Intelligence intelligence, 
+                Evasion evasion, string name)
     {
         Name = name;
         Health = health;
@@ -68,6 +79,7 @@ class Hero
         Damage = damage;
         Agility = agility;
         Intelligence = intelligence;
+        Evasion = evasion;
 
         Health.Value = health.Value + strength.Value * 1.6;
         Damage.Value = damage.Value + agility.Value * 1.2;
@@ -81,6 +93,12 @@ class Hero
 
         Console.WriteLine($"{Name} with {string.Format("{0:0}", Health.Value)}HP attacked {hero.Name} " +
                           $"with {string.Format("{0:0}", hero.Health.Value)}HP");
+
+        if (ShouldMiss(hero))
+        {
+            Console.WriteLine("\nMiss\n");
+            return;
+        }
 
         Console.WriteLine($"{hero.Name} -{string.Format("{0:0}", Damage.Value)}hp\n");
         hero.Health.Value -= Damage.Value;
@@ -97,7 +115,13 @@ class Hero
         {
             Console.WriteLine($"{hero.Name} now have {string.Format("{0:0}", hero.Health.Value)}HP\n");
         }
+    }
 
+    private bool ShouldMiss(Hero hero)
+    {
+        int chance = new Random().Next(0, 100);
+
+        return !(chance > hero.Evasion.Value);
     }
 
     private void Kill(Hero hero)
@@ -115,8 +139,9 @@ class Hero
 
 class Healer : Hero
 {
-    public Healer(Health health, Strength strength, Damage damage, Agility agility, Intelligence intelligence, string name)
-         : base(health, strength, damage, agility, intelligence, name) { }
+    public Healer(Health health, Strength strength, Damage damage, Agility agility, Intelligence intelligence, 
+                  Evasion evasion, string name)
+         : base(health, strength, damage, agility, intelligence, evasion, name) { }
 
     public void Heal(Hero hero)
     {
@@ -145,14 +170,14 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Hero axe = new Hero(new Health("hp", 100), new Strength("strength", 2),
-                            new Damage("damage", 13), new Agility("agility", 4), new Intelligence("intelligence", 3), "Axe");
+        var axe = new Hero(new ("hp", 100), new ("strength", 2), new ("damage", 13), new ("agility", 4), 
+                            new ("intelligence", 3), new ("evasion",40), "Axe");
 
-        Hero lina = new Hero(new Health("hp", 30), new Strength("strength", 1),
-                            new Damage("damage", 13), new Agility("agility", 8), new Intelligence("intelligence", 6), "Lina");
+        var lina = new Hero(new ("hp", 30), new ("strength", 1), new ("damage", 13), new ("agility", 8), 
+                             new ("intelligence", 6), new ("evasion",65), "Lina");
 
-        Healer witchDoctor = new Healer(new Health("hp", 100), new Strength("strength", 0.5),
-                            new Damage("damage", 20), new Agility("agility", 2), new Intelligence("intelligence", 7), "Witch Doctor");
+        var witchDoctor = new Healer(new ("hp", 100), new ("strength", 0.5), new ("damage", 20), 
+                                     new ("agility", 2), new ("intelligence", 7), new ("evasion",35), "Witch Doctor");
 
         axe.Attack(lina);
 
