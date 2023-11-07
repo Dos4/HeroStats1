@@ -100,7 +100,7 @@ class Hero
 
     }
 
-    private void CalculateExperience(Hero hero)
+    private void CalculateKillEnemyHeroExperience(Hero hero)
     {
         int difference = Level - hero.Level;
 
@@ -121,7 +121,7 @@ class Hero
     private void Kill(Hero hero)
     {
         Console.WriteLine($"{Name} killed {hero.Name}\n");
-        CalculateExperience(hero);
+        CalculateKillEnemyHeroExperience(hero);
 
         Agility.Value += 2 * Level;
         Strength.Value += 2 * Level;
