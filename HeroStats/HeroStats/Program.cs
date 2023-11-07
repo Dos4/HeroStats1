@@ -2,51 +2,37 @@
 {
     public string Name { get; set; }
     public double Value { get; set; }
+
+    public Stat(string name, double value)
+    {
+        Name = name;
+        Value = value;
+    }
 }
 
 class Health : Stat
 {
-    public Health(string name, double value)
-    {
-        Name = name;
-        Value = value;
-    }
+    public Health(double value, string name = nameof(Health)) : base(name, value) { }
 }
 
 class Damage : Stat
 {
-    public Damage(string name, double value)
-    {
-        Name = name;
-        Value = value;
-    }
+    public Damage(double value, string name = nameof(Damage)) : base(name, value) { }
 }
 
 class Strength : Stat
 {
-    public Strength(string name, double value)
-    {
-        Name = name;
-        Value = value;
-    }
+    public Strength(double value, string name = nameof(Strength)) : base(name, value) { }
 }
 
 class Agility : Stat
 {
-    public Agility(string name, double value)
-    {
-        Name = name;
-        Value = value;
-    }
+    public Agility(double value, string name = nameof(Agility)) : base(name, value) { }
 }
 
 class Intelligence : Stat
 {
-    public Intelligence(string name, double value)
-    {
-        Name = name;
-        Value = value;
-    }
+    public Intelligence(double value, string name = nameof(Intelligence)) : base(name, value) { }
 }
 
 class Hero
@@ -145,14 +131,14 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Hero axe = new Hero(new Health("hp", 100), new Strength("strength", 2),
-                            new Damage("damage", 13), new Agility("agility", 4), new Intelligence("intelligence", 3), "Axe");
+        Hero axe = new Hero(new Health(100), new Strength(2), new Damage(13), new Agility(4), 
+                            new Intelligence(3), "Axe");
 
-        Hero lina = new Hero(new Health("hp", 30), new Strength("strength", 1),
-                            new Damage("damage", 13), new Agility("agility", 8), new Intelligence("intelligence", 6), "Lina");
+        Hero lina = new Hero(new Health(30), new Strength(1), new Damage(13), new Agility(8), 
+                             new Intelligence(6), "Lina");
 
-        Healer witchDoctor = new Healer(new Health("hp", 100), new Strength("strength", 0.5),
-                            new Damage("damage", 20), new Agility("agility", 2), new Intelligence("intelligence", 7), "Witch Doctor");
+        Healer witchDoctor = new Healer(new Health(100), new Strength(0.5), new Damage(20), new Agility(2), 
+                             new Intelligence(7), "Witch Doctor");
 
         axe.Attack(lina);
 
