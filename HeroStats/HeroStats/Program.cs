@@ -124,10 +124,28 @@ class Hero
         return !(chance > hero.Evasion.Value);
     }
 
+    private void CalculateKillEnemyHeroExperience(Hero hero)
+    {
+        int difference = Level - hero.Level;
+
+        if (Level > hero.Level)
+        {
+            Experience += 150 / difference;
+        }
+        else if (Level < hero.Level)
+        {
+            Experience += 150 * difference;
+        }
+        else if (Level == hero.Level)
+        {
+            Experience += 150;
+        }
+    }
+
     private void Kill(Hero hero)
     {
         Console.WriteLine($"{Name} killed {hero.Name}\n");
-        Experience += 150;
+        CalculateKillEnemyHeroExperience(hero);
 
         Agility.Value += 2 * Level;
         Strength.Value += 2 * Level;
